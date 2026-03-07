@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <menuitem id="menu_school_root" name="School"/>
+
+        <menuitem id="menu_students"
+                  name="Students"
+                  parent="menu_school_root"
+                  action="student_act_window"
+
+             />
+
+        <menuitem id="menu_parents"
+                  name="Parents"
+                  parent="menu_school_root"
+                  action="parent_act_window"
+                />
+
+        <menuitem id="menu_teachers"
+                  name="Teachers"
+                  parent="menu_school_root"
+                  action="teacher_act_window"
+                />
+
+        <menuitem id="menu_classes"
+                  name="Classes"
+                  parent="menu_school_root"
+                  action="class_act_window"
+                />
+    </data>
+</odoo>

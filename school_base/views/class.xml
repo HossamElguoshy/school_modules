@@ -1,0 +1,57 @@
+<odoo>
+    <data>
+        <!-- Tree View for Classes -->
+        <record id="class_tree" model="ir.ui.view">
+            <field name="name">class_list</field>
+            <field name="model">school.class</field>
+            <field name="arch" type="xml">
+                <list string="Classes">
+                    <field name="name"/>
+                    <field name="student_count"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View for Classes -->
+        <record id="class_form" model="ir.ui.view">
+            <field name="name">class.form</field>
+            <field name="model">school.class</field>
+            <field name="arch" type="xml">
+                <form string="Class">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="teacher_ids" widget="many2many_tags"/>
+                                <field name="subject_ids" widget="many2many_tags"/>
+                                <field name="student_count" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="student_ids">
+                                    <list>
+                                        <field name="partner_id"/>
+                                        <field name="date_of_birth"/>
+                                        <field name="gender"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action Window for Classes -->
+        <record id="class_act_window" model="ir.actions.act_window">
+            <field name="name">Classes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.class</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

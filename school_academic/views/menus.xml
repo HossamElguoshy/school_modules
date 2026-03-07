@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_school_academic_root" name="Academic" />
+
+        <menuitem id="menu_subjects"
+                  name="Subjects"
+                  parent="menu_school_academic_root"
+                  action="subject_act_window"
+                />
+
+        <menuitem id="menu_grades"
+                  name="Grades"
+                  parent="menu_school_academic_root"
+                  action="grade_act_window"
+                />
+    </data>
+</odoo>
