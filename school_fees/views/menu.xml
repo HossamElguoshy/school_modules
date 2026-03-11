@@ -1,0 +1,23 @@
+<odoo>
+
+    <menuitem
+        id="menu_school_fees_root"
+        name="School Fees"
+        parent="school_core.menu_school_root"
+        sequence="70"/>
+
+
+    <menuitem
+        id="menu_student_fees"
+        name="Student Fees"
+        parent="menu_school_fees_root"
+        action="action_school_fee"/>
+
+
+    <menuitem
+        id="menu_fee_structure"
+        name="Fee Structure"
+        parent="menu_school_fees_root"
+        action="action_fee_structure"/>
+
+</odoo>

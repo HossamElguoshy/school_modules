@@ -55,7 +55,7 @@
                 <field name="student_birthdate"/>
               </group>
               <group>
-                <field name="student_id" readonly="1"/>
+                <field name="student_id" invisible="1"/>
               </group>
             </group>
 

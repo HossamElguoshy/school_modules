@@ -31,7 +31,7 @@ class SchoolApplication(models.Model):
     note = fields.Text()
     attachment_ids = fields.Many2many("ir.attachment", string="Documents")
 
-    student_id = fields.Many2one("school.student", readonly=True, copy=False)
+    student_id = fields.Many2one("school.student", copy=False)
 
     @api.model_create_multi
     def create(self, vals_list):
