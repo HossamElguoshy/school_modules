@@ -10,7 +10,7 @@ class SchoolStudent(models.Model):
     student_code = fields.Char(readonly=True, copy=False, index=True, tracking=True, default=lambda self: self.env['ir.sequence'].next_by_code('school.student'))
 
     # الطالب كـ partner لسهولة portal/contacts (ممكن تعمل partner منفصل للطالب)
-    partner_id = fields.Many2one("res.partner", required=True, tracking=True, ondelete="restrict")
+    partner_id = fields.Many2one("res.partner", required=True, tracking=True, ondelete="restrict", string="student_part")
 
     guardian_partner_ids = fields.Many2many(
         "res.partner",
