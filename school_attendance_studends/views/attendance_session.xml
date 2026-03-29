@@ -1,18 +1,21 @@
 <odoo>
 
-    <!-- list View -->
+    <!-- List View -->
     <record id="view_attendance_session_list" model="ir.ui.view">
         <field name="name">school.attendance.session.list</field>
         <field name="model">school.attendance.session</field>
         <field name="arch" type="xml">
             <list>
+                <field name="name"/>
                 <field name="date"/>
                 <field name="section_id"/>
-
+                <field name="present_count"/>
+                <field name="absent_count"/>
+                <field name="late_count"/>
+                <field name="excused_count"/>
             </list>
         </field>
     </record>
-
 
     <!-- Form View -->
     <record id="view_attendance_session_form" model="ir.ui.view">
@@ -24,15 +27,22 @@
                 <sheet>
 
                     <group>
-                        <field name="date"/>
-                        <field name="section_id"/>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="date"/>
+                            <field name="section_id"/>
+                        </group>
 
+                        <group string="Summary">
+                            <field name="present_count" readonly="1"/>
+                            <field name="absent_count" readonly="1"/>
+                            <field name="late_count" readonly="1"/>
+                            <field name="excused_count" readonly="1"/>
+                        </group>
                     </group>
 
                     <notebook>
-
                         <page string="Students Attendance">
-
                             <field name="line_ids">
                                 <list editable="bottom">
                                     <field name="student_id"/>
@@ -40,9 +50,7 @@
                                     <field name="note"/>
                                 </list>
                             </field>
-
                         </page>
-
                     </notebook>
 
                 </sheet>
@@ -50,7 +58,6 @@
             </form>
         </field>
     </record>
-
 
     <!-- Action -->
     <record id="action_attendance_session" model="ir.actions.act_window">

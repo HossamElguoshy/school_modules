@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_school_exam_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+
+                            <style>
+                                .exam-title {
+                                    font-size: 28px;
+                                    font-weight: 700;
+                                    color: #2c3e50;
+                                    margin-bottom: 6px;
+                                }
+                                .exam-subtitle {
+                                    font-size: 14px;
+                                    color: #7f8c8d;
+                                    margin-bottom: 18px;
+                                }
+                                .info-box {
+                                    border: 1px solid #d9d9d9;
+                                    border-radius: 10px;
+                                    padding: 14px 16px;
+                                    background: #fafafa;
+                                    margin-bottom: 18px;
+                                }
+                                .info-table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+                                .info-table td {
+                                    padding: 8px 10px;
+                                    border: none;
+                                    vertical-align: top;
+                                }
+                                .label-cell {
+                                    width: 20%;
+                                    font-weight: 700;
+                                    color: #34495e;
+                                }
+                                .value-cell {
+                                    width: 30%;
+                                    color: #222;
+                                }
+                                .section-title {
+                                    font-size: 18px;
+                                    font-weight: 700;
+                                    color: #2c3e50;
+                                    margin-top: 20px;
+                                    margin-bottom: 10px;
+                                    border-bottom: 2px solid #e5e5e5;
+                                    padding-bottom: 5px;
+                                }
+                                .summary-row {
+                                    display: table;
+                                    width: 100%;
+                                    margin-bottom: 18px;
+                                }
+                                .summary-card {
+                                    display: inline-block;
+                                    width: 23%;
+                                    margin-right: 1%;
+                                    border: 1px solid #d9d9d9;
+                                    border-radius: 10px;
+                                    padding: 12px;
+                                    background: #f8f9fb;
+                                    text-align: center;
+                                }
+                                .summary-number {
+                                    font-size: 24px;
+                                    font-weight: 700;
+                                    color: #2c3e50;
+                                }
+                                .summary-label {
+                                    font-size: 13px;
+                                    color: #666;
+                                    margin-top: 4px;
+                                }
+                                .results-table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                    margin-top: 8px;
+                                }
+                                .results-table thead th {
+                                    background: #eef3f7;
+                                    border: 1px solid #d9d9d9;
+                                    padding: 10px;
+                                    text-align: left;
+                                    font-weight: 700;
+                                }
+                                .results-table tbody td {
+                                    border: 1px solid #d9d9d9;
+                                    padding: 10px;
+                                }
+                                .text-center {
+                                    text-align: center;
+                                }
+                                .text-right {
+                                    text-align: right;
+                                }
+                                .status-pass {
+                                    font-weight: 700;
+                                    color: #15803d;
+                                }
+                                .status-fail {
+                                    font-weight: 700;
+                                    color: #b91c1c;
+                                }
+                            </style>
+
+                            <div class="exam-title">Exam Result Report</div>
+                            <div class="exam-subtitle">Official exam performance sheet</div>
+
+                            <div class="info-box">
+                                <table class="info-table">
+                                    <tr>
+                                        <td class="label-cell">Exam Name</td>
+                                        <td class="value-cell"><span t-field="o.name"/></td>
+
+                                        <td class="label-cell">Date</td>
+                                        <td class="value-cell"><span t-field="o.date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-cell">Academic Year</td>
+                                        <td class="value-cell"><span t-field="o.academic_year_id"/></td>
+
+                                        <td class="label-cell">Grade</td>
+                                        <td class="value-cell"><span t-field="o.grade_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-cell">Section</td>
+                                        <td class="value-cell"><span t-field="o.section_id"/></td>
+
+                                        <td class="label-cell">Subject</td>
+                                        <td class="value-cell"><span t-field="o.subject_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-cell">Max Mark</td>
+                                        <td class="value-cell"><span t-field="o.max_mark"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="section-title">Summary</div>
+                            <div class="summary-row">
+                                <div class="summary-card">
+                                    <div class="summary-number">
+                                        <t t-out="len(o.line_ids)"/>
+                                    </div>
+                                    <div class="summary-label">Total Students</div>
+                                </div>
+
+                                <div class="summary-card">
+                                    <div class="summary-number">
+                                        <t t-out="len(o.line_ids.filtered(lambda l: l.status == 'pass'))"/>
+                                    </div>
+                                    <div class="summary-label">Passed</div>
+                                </div>
+
+                                <div class="summary-card">
+                                    <div class="summary-number">
+                                        <t t-out="len(o.line_ids.filtered(lambda l: l.status == 'fail'))"/>
+                                    </div>
+                                    <div class="summary-label">Failed</div>
+                                </div>
+
+                                <div class="summary-card">
+                                    <div class="summary-number">
+                                        <t t-out="round(sum(o.line_ids.mapped('percentage')) / len(o.line_ids), 2) if o.line_ids else 0"/>
+                                    </div>
+                                    <div class="summary-label">Average %</div>
+                                </div>
+                            </div>
+
+                            <div class="section-title">Students Results</div>
+
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 28%;">Student</th>
+                                        <th style="width: 12%;" class="text-center">Mark</th>
+                                        <th style="width: 12%;" class="text-center">Max Mark</th>
+                                        <th style="width: 14%;" class="text-center">Percentage</th>
+                                        <th style="width: 14%;" class="text-center">Status</th>
+                                        <th style="width: 10%;" class="text-center">Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.line_ids" t-as="line">
+                                        <td><span t-field="line.student_id"/></td>
+                                        <td class="text-center"><span t-field="line.mark"/></td>
+                                        <td class="text-center"><span t-field="line.max_mark"/></td>
+                                        <td class="text-center">
+                                            <span t-out="round(line.percentage, 2)"/>%
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="line.status == 'pass'">
+                                                <span class="status-pass">Pass</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="status-fail">Fail</span>
+                                            </t>
+                                        </td>
+                                        <td class="text-center"><span t-field="line.grade_letter"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_school_exam" model="ir.actions.report">
+            <field name="name">Exam Result Report</field>
+            <field name="model">school.exam</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">school_exams.report_school_exam_template</field>
+            <field name="report_file">school_exams.report_school_exam_template</field>
+            <field name="binding_model_id" ref="model_school_exam"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

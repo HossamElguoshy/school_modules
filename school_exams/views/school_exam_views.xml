@@ -1,30 +1,37 @@
 <odoo>
     <data>
+
+        <!-- Exam Form View -->
         <record id="view_school_exam_form" model="ir.ui.view">
             <field name="name">school.exam.form</field>
             <field name="model">school.exam</field>
             <field name="arch" type="xml">
-                <form>
-
+                <form string="Exam">
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="date"/>
-                            <field name="academic_year_id"/>
-                            <field name="grade_id"/>
-                            <field name="section_id"/>
-                            <field name="subject_id"/>
-                            <field name="max_mark"/>
+                            <group>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="academic_year_id"/>
+                            </group>
+                            <group>
+                                <field name="grade_id"/>
+                                <field name="section_id"/>
+                                <field name="subject_id"/>
+                                <field name="max_mark"/>
+                            </group>
                         </group>
+
                         <notebook>
                             <page string="Students">
                                 <field name="line_ids">
-                                    <list>
+                                    <list editable="bottom">
                                         <field name="student_id"/>
                                         <field name="mark"/>
-                                        <field name="max_mark"/>
-                                        <field name="percentage"/>
-                                        <field name="status"/>
+                                        <field name="max_mark" readonly="1"/>
+                                        <field name="percentage" readonly="1"/>
+                                        <field name="status" readonly="1"/>
+                                        <field name="grade_letter" readonly="1"/>
                                     </list>
                                 </field>
                             </page>
@@ -33,6 +40,8 @@
                 </form>
             </field>
         </record>
+
+        <!-- Exam List View -->
         <record id="view_school_exam_list" model="ir.ui.view">
             <field name="name">school.exam.list</field>
             <field name="model">school.exam</field>
@@ -40,36 +49,45 @@
                 <list>
                     <field name="name"/>
                     <field name="date"/>
+                    <field name="academic_year_id"/>
                     <field name="grade_id"/>
                     <field name="section_id"/>
-
+                    <field name="subject_id"/>
                     <field name="max_mark"/>
                 </list>
             </field>
         </record>
-          <record id="view_exam_line_form" model="ir.ui.view">
-                <field name="name">exam.line.form</field>
-                <field name="model">school.exam.line</field>
-                <field name="arch" type="xml">
-                    <form string="Student Grade">
-                        <sheet>
+
+        <!-- Exam Line Form View -->
+        <record id="view_exam_line_form" model="ir.ui.view">
+            <field name="name">exam.line.form</field>
+            <field name="model">school.exam.line</field>
+            <field name="arch" type="xml">
+                <form string="Student Grade">
+                    <sheet>
+                        <group>
                             <group>
                                 <field name="student_id"/>
                                 <field name="mark"/>
+                                <field name="max_mark" readonly="1"/>
                             </group>
                             <group>
                                 <field name="percentage" readonly="1"/>
                                 <field name="status" readonly="1"/>
+                                <field name="grade_letter" readonly="1"/>
                             </group>
-                        </sheet>
-                    </form>
-                </field>
-          </record>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
+        <!-- Action -->
         <record id="action_school_exam" model="ir.actions.act_window">
             <field name="name">Exams</field>
             <field name="res_model">school.exam</field>
             <field name="view_mode">list,form</field>
         </record>
+
     </data>
 </odoo>

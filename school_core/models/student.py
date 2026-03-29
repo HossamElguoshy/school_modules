@@ -48,11 +48,12 @@ class SchoolStudent(models.Model):
                 rec.name = rec.partner_id.name
 
     @api.model_create_multi
-    def create(self, vals):
-        if not vals.get("name") and vals.get("partner_id"):
-            partner = self.env["res.partner"].browse(vals["partner_id"])
-            vals["name"] = partner.name
-        return super().create(vals)
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get("name") and vals.get("partner_id"):
+                partner = self.env["res.partner"].browse(vals["partner_id"])
+                vals["name"] = partner.name
+        return super().create(vals_list)
 
     @api.onchange("guardian_partner_ids", "partner_id")
     def _onchange_invoice_partner(self):

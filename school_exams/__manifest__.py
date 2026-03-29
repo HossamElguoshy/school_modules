@@ -6,7 +6,7 @@
         "views/school_exam_views.xml",
 
         "views/menu.xml",
-
-    ],
+		"report/school_exam_report.xml",
+],
     "application": False,
 }
