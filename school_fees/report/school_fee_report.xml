@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action -->
+     <record id="action_report_school_fee" model="ir.actions.report">
+        <field name="name">Fee Summary</field>
+        <field name="model">school.fee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">school_fees.report_school_fee_template</field>
+        <field name="report_file">school_fees.report_school_fee_template</field>
+        <field name="binding_model_id" ref="model_school_fee"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    
+    <!-- Report Template -->
+    <template id="report_school_fee_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <style>
+                            .fee-title {
+                                font-size: 28px;
+                                font-weight: 700;
+                                margin-bottom: 10px;
+                                color: #2c3e50;
+                            }
+                            .fee-subtitle {
+                                font-size: 14px;
+                                color: #666;
+                                margin-bottom: 20px;
+                            }
+                            .info-card {
+                                border: 1px solid #d9d9d9;
+                                border-radius: 10px;
+                                padding: 14px 16px;
+                                margin-bottom: 20px;
+                                background: #fafafa;
+                            }
+                            .info-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                            }
+                            .info-table td {
+                                padding: 8px 10px;
+                                vertical-align: top;
+                                border: none;
+                            }
+                            .label-cell {
+                                width: 22%;
+                                font-weight: 700;
+                                color: #34495e;
+                            }
+                            .value-cell {
+                                width: 28%;
+                                color: #222;
+                            }
+                            .section-title {
+                                font-size: 18px;
+                                font-weight: 700;
+                                margin: 18px 0 10px;
+                                color: #2c3e50;
+                                border-bottom: 2px solid #e5e5e5;
+                                padding-bottom: 6px;
+                            }
+                            .fee-lines-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 8px;
+                            }
+                            .fee-lines-table thead th {
+                                background: #f0f4f7;
+                                border: 1px solid #d9d9d9;
+                                padding: 10px;
+                                text-align: left;
+                                font-weight: 700;
+                            }
+                            .fee-lines-table tbody td {
+                                border: 1px solid #d9d9d9;
+                                padding: 10px;
+                            }
+                            .text-right {
+                                text-align: right;
+                            }
+                            .summary-box {
+                                width: 38%;
+                                margin-left: auto;
+                                margin-top: 16px;
+                                border: 1px solid #d9d9d9;
+                                border-radius: 10px;
+                                overflow: hidden;
+                            }
+                            .summary-box table {
+                                width: 100%;
+                                border-collapse: collapse;
+                            }
+                            .summary-box td {
+                                padding: 10px 12px;
+                                border-bottom: 1px solid #e5e5e5;
+                            }
+                            .summary-box tr:last-child td {
+                                border-bottom: none;
+                                font-weight: 700;
+                                background: #f7f7f7;
+                            }
+                            .status-badge {
+                                display: inline-block;
+                                padding: 4px 10px;
+                                border-radius: 12px;
+                                font-size: 12px;
+                                font-weight: 700;
+                                background: #e8f0fe;
+                                color: #1d4ed8;
+                            }
+                            .empty-note {
+                                color: #888;
+                                font-style: italic;
+                                margin-top: 8px;
+                            }
+                        </style>
+
+                        <div class="fee-title">Fee Summary</div>
+                        <div class="fee-subtitle">
+                            Student fee details and invoice reference
+                        </div>
+
+                        <div class="info-card">
+                            <table class="info-table">
+                                <tr>
+                                    <td class="label-cell">Student</td>
+                                    <td class="value-cell">
+                                        <span t-field="o.student_id"/>
+                                    </td>
+
+                                    <td class="label-cell">Invoice To</td>
+                                    <td class="value-cell">
+                                        <span t-field="o.student_id.invoice_partner_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label-cell">Status</td>
+                                    <td class="value-cell">
+                                        <span class="status-badge">
+                                            <span t-field="o.state"/>
+                                        </span>
+                                    </td>
+
+                                    <td class="label-cell">Invoice</td>
+                                    <td class="value-cell">
+                                        <t t-if="o.invoice_id">
+                                            <span t-field="o.invoice_id"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="empty-note">No Invoice</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="section-title">Fee Lines</div>
+
+                        <t t-if="o.fee_line_ids">
+                            <table class="fee-lines-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 70%;">Fee Type</th>
+                                        <th style="width: 30%;" class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.fee_line_ids" t-as="line">
+                                        <td>
+                                            <span t-field="line.fee_structure_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.amount"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <div class="empty-note">No fee lines found.</div>
+                        </t>
+
+                        <div class="summary-box">
+                            <table>
+                                <tr>
+                                    <td>Total Amount</td>
+                                    <td class="text-right">
+                                        <span t-field="o.total_amount"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

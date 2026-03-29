@@ -6,7 +6,7 @@
         "views/fee_structure.xml",
         "views/school_fee.xml",
         "views/menu.xml",
-
-    ],
+		"report/school_fee_report.xml",
+],
     "application": False,
 }

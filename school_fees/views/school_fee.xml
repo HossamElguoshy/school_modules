@@ -10,6 +10,7 @@
                 <field name="student_id"/>
                 <field name="total_amount"/>
                 <field name="invoice_id"/>
+                <field name="state"/>
 
             </list>
         </field>
@@ -26,12 +27,18 @@
                 <sheet>
 
                     <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,invoiced,paid,partial,overdue"/>
 
                         <button
                             name="action_create_invoice"
                             type="object"
                             string="Create Invoice"
-                            class="btn-primary"/>
+                            class="btn-primary"
+                           />
+                        <button name="action_view_invoice" type="object" string="View Invoice" class="btn-primary"/>
+                        <button name="action_update_state_from_invoice"
+                            type="object"
+                            string="Update State"/>
 
                     </header>
 

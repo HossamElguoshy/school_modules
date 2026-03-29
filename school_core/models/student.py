@@ -3,8 +3,9 @@ from odoo.exceptions import ValidationError
 class SchoolStudent(models.Model):
     _name = "school.student"
     _description = "Student"
-    _inherit = ["school.student", "mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin","school.student"]
     _order = "student_code desc"
+    _rec_name = "name"
 
     name = fields.Char(required=True, tracking=True)
     student_code = fields.Char(readonly=True, copy=False, index=True, tracking=True, default=lambda self: self.env['ir.sequence'].next_by_code('school.student'))
@@ -40,8 +41,31 @@ class SchoolStudent(models.Model):
         help="Default partner to invoice (usually first guardian)."
     )
 
+    @api.onchange("partner_id")
+    def _onchange_partner_id(self):
+        for rec in self:
+            if rec.partner_id:
+                rec.name = rec.partner_id.name
+
+    @api.model_create_multi
+    def create(self, vals):
+        if not vals.get("name") and vals.get("partner_id"):
+            partner = self.env["res.partner"].browse(vals["partner_id"])
+            vals["name"] = partner.name
+        return super().create(vals)
+
+    @api.onchange("guardian_partner_ids", "partner_id")
+    def _onchange_invoice_partner(self):
+        for rec in self:
+            if rec.guardian_partner_ids:
+                rec.invoice_partner_id = rec.guardian_partner_ids[0].id
+            else:
+                rec.invoice_partner_id = rec.partner_id.id
 
     @api.depends("guardian_partner_ids", "partner_id")
     def _compute_invoice_partner(self):
         for rec in self:
-            rec.invoice_partner_id = (rec.guardian_partner_ids[:1].id or rec.partner_id.id)
+            if rec.guardian_partner_ids:
+                rec.invoice_partner_id = rec.guardian_partner_ids[0].id
+            else:
+                rec.invoice_partner_id = rec.partner_id.id

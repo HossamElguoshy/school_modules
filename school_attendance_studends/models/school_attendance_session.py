@@ -24,6 +24,11 @@ class SchoolAttendanceSession(models.Model):
         "session_id"
     )
 
+    _sql_constraints = [
+        ("section_date_unique", "unique(section_id, date)",
+         "Attendance session already exists for this section on this date."),
+    ]
+
     @api.onchange("section_id")
     def _onchange_section_id(self):
         """Auto-populate attendance lines when section is changed"""
