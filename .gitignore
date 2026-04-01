@@ -1,0 +1,25 @@
+# ملفات Python المترجمة
+*.pyc
+__pycache__/
+
+# ملفات البيئة الافتراضية
+.venv/
+env/
+venv/
+
+# ملفات قاعدة البيانات المحلية
+*.db
+*.sqlite3
+
+# ملفات Odoo المولدة تلقائيًا
+*.log
+*.pot
+*.po~
+
+# ملفات VS Code أو أي IDE
+.vscode/
+.idea/
+
+# ملفات النظام
+.DS_Store
+Thumbs.db

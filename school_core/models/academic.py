@@ -18,8 +18,11 @@ class SchoolAcademicYear(models.Model):
     def _check_dates(self):
         for rec in self:
             if rec.date_start and rec.date_end and rec.date_start > rec.date_end:
-                raise ValidationError(_("Start date must be before end date."))
+                raise ValidationError(("Start date must be before end date."))
 
+    _sql_constraints = [
+        ("academic_year_name_unique", "unique(name)", "Academic year name must be unique."),
+    ]
 
 class SchoolTerm(models.Model):
     _name = "school.term"
@@ -51,7 +54,9 @@ class SchoolGrade(models.Model):
 
     section_ids = fields.One2many("school.section", "grade_id", string="Sections")
 
-
+    _sql_constraints = [
+        ("grade_name_unique", "unique(name)", "Grade name must be unique."),
+    ]
 class SchoolSection(models.Model):
     _name = "school.section"
     _description = "Section/Class"
@@ -71,7 +76,9 @@ class SchoolSection(models.Model):
         for rec in self:
             rec.student_count = Student.search_count([("section_id", "=", rec.id), ("active", "=", True)])
 
-
+    _sql_constraints = [
+        ("section_grade_name_unique", "unique(name, grade_id)", "Section name must be unique per grade."),
+    ]
 class SchoolSubject(models.Model):
     _name = "school.subject"
     _description = "Subject"
@@ -80,3 +87,6 @@ class SchoolSubject(models.Model):
     name = fields.Char(required=True, index=True)
     code = fields.Char(index=True)
     active = fields.Boolean(default=True)
+    _sql_constraints = [
+        ("subject_name_unique", "unique(name)", "Subject name must be unique."),
+    ]

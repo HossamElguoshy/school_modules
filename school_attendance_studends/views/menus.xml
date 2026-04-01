@@ -1,0 +1,11 @@
+<odoo>
+  <menuitem id="menu_school_attendance_root"
+            name="Attendance"
+            parent="school_core.menu_school_root"
+            sequence="40"/>
+
+  <menuitem id="menu_school_attendance"
+            name="Attendance session"
+            parent="menu_school_attendance_root"
+            action="action_attendance_session"/>
+</odoo>
