@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="school_exams.ExamDashboard">
+        <div class="o_exam_dashboard p-3">
+            <div class="o_exam_filters row g-2 mb-3">
+                <t t-foreach="['academic_year_id','grade_id','section_id','subject_id','exam_id']" t-as="f" t-key="f">
+                    <div class="col-lg-2 col-md-4 col-sm-6">
+                        <select class="form-select" t-att-name="f" t-on-change="onFilterChange">
+                            <option value="">All <t t-esc="f.replace('_id', '').replace('_', ' ')"/></option>
+                            <t t-set="bucket" t-value="f === 'academic_year_id' ? 'academic_years' : (f === 'grade_id' ? 'grades' : (f === 'section_id' ? 'sections' : (f === 'subject_id' ? 'subjects' : 'exams')))"/>
+                            <t t-foreach="state.options[bucket]" t-as="opt" t-key="opt.id">
+                                <option t-att-value="opt.id" t-att-selected="state.filters[f] === opt.id"><t t-esc="opt.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </t>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <t t-set="kpis" t-value="[
+                    ['Total Exams', state.kpis.total_exams || 0],
+                    ['Total Results', state.kpis.total_results || 0],
+                    ['Students Evaluated', state.kpis.total_students || 0],
+                    ['Avg %', state.kpis.average_percentage || 0],
+                    ['Passed', state.kpis.passed_students || 0],
+                    ['Failed', state.kpis.failed_students || 0],
+                    ['Pass Rate %', state.kpis.pass_rate || 0],
+                    ['Highest Mark', state.kpis.highest_mark || 0],
+                    ['Lowest Mark', state.kpis.lowest_mark || 0],
+                ]"/>
+                <t t-foreach="kpis" t-as="kpi" t-key="kpi[0]">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="o_exam_kpi_card card h-100">
+                            <div class="card-body">
+                                <h6 class="text-muted"><t t-esc="kpi[0]"/></h6>
+                                <h3 class="mb-0"><t t-esc="kpi[1]"/></h3>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="card h-100"><div class="card-body">
+                        <h5>Passed vs Failed</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                <t t-foreach="state.charts.status" t-as="row" t-key="row.label">
+                                    <tr><td><t t-esc="row.label"/></td><td class="text-end"><t t-esc="row.value"/></td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100"><div class="card-body">
+                        <h5>Grade Letter Distribution</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                <t t-foreach="state.charts.grade_distribution" t-as="row" t-key="row.grade_letter">
+                                    <tr><td><t t-esc="row.grade_letter"/></td><td class="text-end"><t t-esc="row.count"/></td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100"><div class="card-body">
+                        <h5>Avg % by Subject</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                <t t-foreach="state.charts.subject_average" t-as="row" t-key="row.subject">
+                                    <tr><td><t t-esc="row.subject"/></td><td class="text-end"><t t-esc="row.average_percentage"/></td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div></div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
