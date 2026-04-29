@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_attendance_session_admin,school.attendance.session admin,model_school_attendance_session,school_core.group_school_admin,1,1,1,1
+access_school_attendance_line_admin,school.attendance.line admin,model_school_attendance_line,school_core.group_school_admin,1,1,1,1
+
+access_school_attendance_session_teacher,school.attendance.session teacher,model_school_attendance_session,school_core.group_school_teacher,1,1,1,0
+access_school_attendance_line_teacher,school.attendance.line teacher,model_school_attendance_line,school_core.group_school_teacher,1,1,1,0

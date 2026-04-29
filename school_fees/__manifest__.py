@@ -3,6 +3,7 @@
     "version": "18.0.1.0.0",
     "depends": ["school_core" ,"account"],
     "data": [
+        "security/ir.model.access.csv",
         "views/fee_structure.xml",
         "views/school_fee.xml",
         "views/menu.xml",
