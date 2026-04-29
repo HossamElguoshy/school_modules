@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Teacher can read students -->
+        <record id="rule_school_student_teacher_read" model="ir.rule">
+            <field name="name">Teacher can read students</field>
+            <field name="model_id" ref="model_school_student"/>
+            <field name="groups" eval="[(4, ref('school_core.group_school_teacher'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+    </data>
+</odoo>

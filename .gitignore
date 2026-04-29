@@ -23,3 +23,12 @@ venv/
 # ملفات النظام
 .DS_Store
 Thumbs.db
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+*.log
+.DS_Store
+.idea/
+.vscode/

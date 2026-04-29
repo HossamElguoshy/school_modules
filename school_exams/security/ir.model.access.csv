@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_exam_admin,school.exam admin,model_school_exam,school_core.group_school_admin,1,1,1,1
+access_school_exam_line_admin,school.exam.line admin,model_school_exam_line,school_core.group_school_admin,1,1,1,1
+
+access_school_exam_teacher,school.exam teacher,model_school_exam,school_core.group_school_teacher,1,1,1,0
+access_school_exam_line_teacher,school.exam.line teacher,model_school_exam_line,school_core.group_school_teacher,1,1,1,0

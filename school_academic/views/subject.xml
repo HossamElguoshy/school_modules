@@ -25,14 +25,7 @@
                             </h1>
                         </div>
                         <group>
-                            <group>
-                                <field name="teacher_ids">
-                                    <list>
-                                        <field name="employee_id"/>
-                                        <field name="active"/>
-                                    </list>
-                                </field>
-                            </group>
+
                             <group>
                                 <field name="class_ids" widget="many2many_tags"/>
                             </group>

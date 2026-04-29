@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_fee_admin,school.fee admin,model_school_fee,school_core.group_school_admin,1,1,1,1
+access_school_fee_line_admin,school.fee.line admin,model_school_fee_line,school_core.group_school_admin,1,1,1,1
+access_school_fee_structure_admin,school.fee.structure admin,model_school_fee_structure,school_core.group_school_admin,1,1,1,1
+
+access_school_fee_accountant,school.fee accountant,model_school_fee,school_core.group_school_accountant,1,1,1,0
+access_school_fee_line_accountant,school.fee.line accountant,model_school_fee_line,school_core.group_school_accountant,1,1,1,0
+access_school_fee_structure_accountant,school.fee.structure accountant,model_school_fee_structure,school_core.group_school_accountant,1,1,1,0

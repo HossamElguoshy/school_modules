@@ -1,0 +1,26 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_student_admin,school.student admin,model_school_student,school_core.group_school_admin,1,1,1,1
+access_school_application_admin,school.application admin,model_school_application,school_core.group_school_admin,1,1,1,1
+access_school_academic_year_admin,school.academic.year admin,model_school_academic_year,school_core.group_school_admin,1,1,1,1
+access_school_term_admin,school.term admin,model_school_term,school_core.group_school_admin,1,1,1,1
+access_school_grade_admin,school.grade admin,model_school_grade,school_core.group_school_admin,1,1,1,1
+access_school_section_admin,school.section admin,model_school_section,school_core.group_school_admin,1,1,1,1
+access_school_subject_admin,school.subject admin,model_school_subject,school_core.group_school_admin,1,1,1,1
+
+access_school_student_teacher,school.student teacher,model_school_student,school_core.group_school_teacher,1,0,0,0
+access_school_academic_year_teacher,school.academic.year teacher,model_school_academic_year,school_core.group_school_teacher,1,0,0,0
+access_school_grade_teacher,school.grade teacher,model_school_grade,school_core.group_school_teacher,1,0,0,0
+access_school_section_teacher,school.section teacher,model_school_section,school_core.group_school_teacher,1,0,0,0
+access_school_subject_teacher,school.subject teacher,model_school_subject,school_core.group_school_teacher,1,0,0,0
+
+
+
+
+
+
+
+
+
+
+
+
