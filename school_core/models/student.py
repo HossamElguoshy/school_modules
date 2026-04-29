@@ -70,3 +70,16 @@ class SchoolStudent(models.Model):
                 rec.invoice_partner_id = rec.guardian_partner_ids[0].id
             else:
                 rec.invoice_partner_id = rec.partner_id.id
+
+    def action_view_contact(self):
+        self.ensure_one()
+        if not self.partner_id:
+            return {"type": "ir.actions.act_window_close"}
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Contact"),
+            "res_model": "res.partner",
+            "view_mode": "form",
+            "res_id": self.partner_id.id,
+            "target": "current",
+        }
