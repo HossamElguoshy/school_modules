@@ -65,6 +65,96 @@ class SchoolExam(models.Model):
             if rec.max_mark <= 0:
                 raise ValidationError(_("Max mark must be greater than zero."))
 
+    @api.model
+    def get_exam_dashboard_data(self, filters=None):
+        filters = filters or {}
+        line_domain = []
+        exam_domain = []
+
+        filter_map = {
+            "academic_year_id": "academic_year_id",
+            "grade_id": "grade_id",
+            "section_id": "section_id",
+            "subject_id": "subject_id",
+            "exam_id": "id",
+        }
+        for key, field_name in filter_map.items():
+            value = filters.get(key)
+            if value:
+                exam_domain.append((field_name, "=", int(value)))
+                line_domain.append((f"exam_id.{field_name}", "=", int(value)) if field_name != "id" else ("exam_id", "=", int(value)))
+
+        exam_model = self.env["school.exam"]
+        line_model = self.env["school.exam.line"]
+
+        exams = exam_model.search(exam_domain)
+        lines = line_model.search(line_domain)
+
+        total_exams = len(exams)
+        total_results = len(lines)
+        total_students = len(lines.mapped("student_id")) if lines else 0
+        average_percentage = sum(lines.mapped("percentage")) / total_results if total_results else 0
+
+        statuses = lines.mapped("status")
+        passed_students = len([status for status in statuses if status in ("pass", "passed")])
+        failed_students = len([status for status in statuses if status in ("fail", "failed")])
+        pass_rate = (passed_students / total_results * 100) if total_results else 0
+
+        marks = lines.mapped("mark") if lines else []
+        highest_mark = max(marks) if marks else 0
+        lowest_mark = min(marks) if marks else 0
+
+        grade_groups = line_model.read_group(line_domain, ["id:count"], ["grade_letter"])
+        grade_distribution = [
+            {
+                "grade_letter": group["grade_letter"] or "N/A",
+                "count": group["__count"],
+            }
+            for group in grade_groups
+        ]
+
+        subject_avg_groups = line_model.read_group(line_domain, ["percentage:avg"], ["exam_id.subject_id"])
+        subject_average = [
+            {
+                "subject": group["exam_id.subject_id"][1] if group.get("exam_id.subject_id") else _("Unknown"),
+                "average_percentage": round(group.get("percentage_avg", 0), 2),
+            }
+            for group in subject_avg_groups
+        ]
+
+        status_chart = [
+            {"label": _("Passed"), "value": passed_students},
+            {"label": _("Failed"), "value": failed_students},
+        ]
+
+        selection_payload = {
+            "academic_years": exam_model.search_read([], ["id", "name"]),
+            "grades": self.env["school.grade"].search_read([], ["id", "name"]),
+            "sections": self.env["school.section"].search_read([], ["id", "name"]),
+            "subjects": self.env["school.subject"].search_read([], ["id", "name"]),
+            "exams": exam_model.search_read([], ["id", "name"]),
+        }
+
+        return {
+            "kpis": {
+                "total_exams": total_exams,
+                "total_results": total_results,
+                "total_students": total_students,
+                "average_percentage": round(average_percentage, 2),
+                "passed_students": passed_students,
+                "failed_students": failed_students,
+                "pass_rate": round(pass_rate, 2),
+                "highest_mark": highest_mark,
+                "lowest_mark": lowest_mark,
+            },
+            "charts": {
+                "status": status_chart,
+                "grade_distribution": grade_distribution,
+                "subject_average": subject_average,
+            },
+            "filters": selection_payload,
+        }
+
 
 class SchoolExamLine(models.Model):
     _name = "school.exam.line"
