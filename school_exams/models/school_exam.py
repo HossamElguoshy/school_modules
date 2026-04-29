@@ -67,6 +67,9 @@ class SchoolExam(models.Model):
 
     @api.model
     def get_exam_dashboard_data(self, filters=None):
+        def _group_count(group):
+            return group.get("id_count", 0) or group.get("__count", 0) or 0
+
         filters = filters or {}
         line_domain = []
         exam_domain = []
@@ -104,11 +107,11 @@ class SchoolExam(models.Model):
         highest_mark = max(marks) if marks else 0
         lowest_mark = min(marks) if marks else 0
 
-        grade_groups = line_model.read_group(line_domain, ["id:count"], ["grade_letter"])
+        grade_groups = line_model.read_group(line_domain, ["id:count", "grade_letter"], ["grade_letter"])
         grade_distribution = [
             {
-                "grade_letter": group["grade_letter"] or "N/A",
-                "count": group["__count"],
+                "grade": group.get("grade_letter") or "Unknown",
+                "count": _group_count(group),
             }
             for group in grade_groups
         ]
@@ -122,9 +125,13 @@ class SchoolExam(models.Model):
             for group in subject_avg_groups
         ]
 
+        status_groups = line_model.read_group(line_domain, ["id:count", "status"], ["status"])
         status_chart = [
-            {"label": _("Passed"), "value": passed_students},
-            {"label": _("Failed"), "value": failed_students},
+            {
+                "status": group.get("status") or "Unknown",
+                "count": _group_count(group),
+            }
+            for group in status_groups
         ]
 
         selection_payload = {
