@@ -85,7 +85,7 @@ class SchoolExam(models.Model):
             value = filters.get(key)
             if value:
                 exam_domain.append((field_name, "=", int(value)))
-                line_domain.append((f"exam_id.{field_name}", "=", int(value)) if field_name != "id" else ("exam_id", "=", int(value)))
+                line_domain.append((field_name, "=", int(value)) if field_name != "id" else ("exam_id", "=", int(value)))
 
         exam_model = self.env["school.exam"]
         line_model = self.env["school.exam.line"]
@@ -116,14 +116,20 @@ class SchoolExam(models.Model):
             for group in grade_groups
         ]
 
-        subject_avg_groups = line_model.read_group(line_domain, ["percentage:avg"], ["exam_id.subject_id"])
-        subject_average = [
-            {
-                "subject": group["exam_id.subject_id"][1] if group.get("exam_id.subject_id") else _("Unknown"),
-                "average_percentage": round(group.get("percentage_avg", 0), 2),
-            }
-            for group in subject_avg_groups
-        ]
+        subject_avg_groups = line_model.read_group(
+            line_domain,
+            ["percentage:avg", "id:count", "subject_id"],
+            ["subject_id"],
+        )
+        subject_average_chart = []
+        for group in subject_avg_groups:
+            subject_value = group.get("subject_id")
+            subject_name = subject_value[1] if isinstance(subject_value, (list, tuple)) and len(subject_value) > 1 else "Unknown"
+            subject_average_chart.append({
+                "subject": subject_name,
+                "average": round(group.get("percentage_avg", 0.0) or 0.0, 2),
+                "count": _group_count(group),
+            })
 
         status_groups = line_model.read_group(line_domain, ["id:count", "status"], ["status"])
         status_chart = [
@@ -157,7 +163,7 @@ class SchoolExam(models.Model):
             "charts": {
                 "status": status_chart,
                 "grade_distribution": grade_distribution,
-                "subject_average": subject_average,
+                "subject_average": subject_average_chart,
             },
             "filters": selection_payload,
         }
@@ -183,6 +189,38 @@ class SchoolExamLine(models.Model):
     max_mark = fields.Float(
         related="exam_id.max_mark",
         store=True
+    )
+
+    subject_id = fields.Many2one(
+        "school.subject",
+        related="exam_id.subject_id",
+        string="Subject",
+        store=True,
+        readonly=True,
+    )
+
+    academic_year_id = fields.Many2one(
+        "school.academic.year",
+        related="exam_id.academic_year_id",
+        string="Academic Year",
+        store=True,
+        readonly=True,
+    )
+
+    grade_id = fields.Many2one(
+        "school.grade",
+        related="exam_id.grade_id",
+        string="Grade",
+        store=True,
+        readonly=True,
+    )
+
+    section_id = fields.Many2one(
+        "school.section",
+        related="exam_id.section_id",
+        string="Section",
+        store=True,
+        readonly=True,
     )
 
     percentage = fields.Float(
